@@ -1,0 +1,4 @@
+# WebViewImgAutoFit
+WebView加载HTML中的图片时，处理图片超过屏幕的问题，让图片自适应屏幕
+
+WebView图片自适应屏幕
