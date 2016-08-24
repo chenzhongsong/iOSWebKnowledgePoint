@@ -11,6 +11,9 @@
 
 @interface HYBTestCell : UITableViewCell
 
+@property (nonatomic, strong) UILabel *label;
+@property (nonatomic, strong) UIWebView *webView;
+
 - (void)configCellWithModel:(HYBTestModel *)model;
 
 @end

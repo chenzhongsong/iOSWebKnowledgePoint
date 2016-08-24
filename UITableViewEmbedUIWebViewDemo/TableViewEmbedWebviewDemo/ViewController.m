@@ -86,11 +86,14 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
   HYBTestModel *model = [self.datasource objectAtIndex:indexPath.row];
   CGFloat w = [UIScreen mainScreen].bounds.size.width;
-  CGFloat h = [model.title sizeWithFont:[UIFont systemFontOfSize:16]
-                      constrainedToSize:CGSizeMake(w, CGFLOAT_MAX)
-                          lineBreakMode:NSLineBreakByWordWrapping].height;
+//  CGFloat h = [model.title sizeWithFont:[UIFont systemFontOfSize:16]
+//                      constrainedToSize:CGSizeMake(w, CGFLOAT_MAX)
+//                          lineBreakMode:NSLineBreakByWordWrapping].height;
+
+    CGFloat h = [model.title boundingRectWithSize:CGSizeMake([UIScreen mainScreen].bounds.size.width - 20, CGFLOAT_MAX) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]} context:nil].size.height+0.5;
+
   h += 10 + 20;
-  
+    
   if (model.webHeight <= 0) {
     // 注意不能使用双引号
     NSString *js = [NSString stringWithFormat:@"document.body.innerHTML = '%@'", model.html];
@@ -105,6 +108,25 @@
     self.webView.scrollView.contentSize = CGSizeMake(w - 20, webHeight);
     model.webHeight = webHeight + 40;
   }
+    
+    
+//    //第二种方法
+//    HYBTestCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+//    if (model.webHeight <= 0) {
+//        // 注意不能使用双引号
+//        NSString *js = [NSString stringWithFormat:@"document.body.innerHTML = '%@'", model.html];
+//        [cell.webView stringByEvaluatingJavaScriptFromString:js];
+//        
+//        NSLog(@"%@", [cell.webView stringByEvaluatingJavaScriptFromString:@"document.body.innerHTML"]);
+//        
+//        NSString *heightJs = @"document.getElementsByTagName('div')[0].scrollHeight";
+//        CGFloat webHeight = [[cell.webView stringByEvaluatingJavaScriptFromString:heightJs] floatValue];
+//        NSLog(@"%f", webHeight);
+//        
+//        cell.webView.scrollView.contentSize = CGSizeMake(w - 20, webHeight);
+//        model.webHeight = webHeight + 40;
+//    }//不行，会crash。  是先走的高度代理  这个时候cell还没有创建 通过cellForRowAtIndexPath得不到cell
+    
   
   return h + model.webHeight + 40;
 }
